@@ -1,0 +1,10 @@
+// 数据库连接配置
+module.exports = {
+  mysql: {
+    host: "localhost",
+    user: "root", // user
+    password: "123456", // password
+    database: "propertydb", // database name
+    port: "3306"
+  }
+};

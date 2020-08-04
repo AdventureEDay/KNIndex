@@ -14,10 +14,10 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
+### Start backend
 ```
-npm run lint
+cd server
+node index.js
 ```
 
 ### Customize configuration
