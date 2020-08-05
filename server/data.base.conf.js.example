@@ -1,4 +1,4 @@
-// 数据库连接配置
+// Database connection configuration
 module.exports = {
   mysql: {
     host: "localhost",
