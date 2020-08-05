@@ -1,5 +1,5 @@
 # knindex
-
+A comprehensive database of k-nucleotide physicochemical property values
 ## Project setup
 ```
 npm install
