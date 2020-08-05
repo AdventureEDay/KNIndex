@@ -7,7 +7,7 @@ If you want to run these codes in the development environment, you should instal
 After your Node.js environment and MySQL are ready, find out the location of the source code of KNIndex that you unpack and enter this directory in command line program. Then execute the command `npm install`.
 
 ### Add data to MySQL database
-Firstly, you should create a database such as **propertydb**. Then, add data to the database by loading SQL file [propertydb.sql](https://github.com/wyzhang0401/KNIndex/blob/master/properties/propertydb.sql).
+Firstly, you should create a database named as **propertydb**. Then, add data to the database by loading SQL file [propertydb.sql](https://github.com/wyzhang0401/KNIndex/blob/master/properties/propertydb.sql).
 
 ### Compiles and hot-reloads for development
 Type and excute the command `npm run serve`. After a while, KNIndex will start in your default browser.
