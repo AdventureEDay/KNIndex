@@ -61,7 +61,7 @@
           border
           stripe
           :show-header="status"
-          empty-text="Select the above parameters to obtain the physicochemical properties first."
+          empty-text="Select the above parameters to obtain the physicochemical properties."
           style="width: 100%"
         >
           <el-table-column type="index" width="40"> </el-table-column>
@@ -128,7 +128,7 @@
         </el-table>
 
         <el-form-item
-          label="Batch convert DNA/RNA sequences of a fasta file"
+          label="Select a FASTA format file and batch convert"
           style="margin-top: 10px; border-top: 1px solid rgb(115, 200, 200); border-bottom:1px solid #ebeef5;"
         >
           <!-- <a href="javascript:;"></a> -->
@@ -390,7 +390,7 @@ export default {
         }
       });
       if (this.file == "") {
-        alert("Please select a fasta file!");
+        alert("Please select a fasta format file!");
         return false;
       }
       let property = _this.form.properties.property;
@@ -683,7 +683,7 @@ var object2object = function(objectArray, length, rows) {
 .submit {
   font-size: 15px;
   height: 35px;
-  width: 100px;
+  width: 120px;
   border-radius: 5px;
   color: #fff;
   background-color: #337ab7;
