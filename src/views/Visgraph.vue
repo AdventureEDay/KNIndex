@@ -7,9 +7,20 @@
       />
       Visualization
     </el-row>
-    <div class="visual">
-      <div id="myVisual" style="width: 90%; height: 90%; padding: 10px;"></div>
-    </div>
+    <el-row>
+      <el-col class="visual" id="vis">
+        <div
+          id="myVisual"
+          style="width: 95%; height: 100%; margin: 0 auto; left: 5px; padding: 5px;"
+        ></div>
+      </el-col>
+      <el-col class="visual" id="avg">
+        <div
+          id="averageVisual"
+          style="width: 95%; height: 100%; margin: 0 auto; left: 5px; padding: 5px;"
+        ></div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -19,8 +30,8 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      kmers: "",
-      values: {}
+      seqIdandKmers: {},
+      propertyValues: {}
     };
   },
   mounted() {
@@ -35,47 +46,139 @@ export default {
     //   localStorage.clear();
     // }
     if (sessionStorage.getItem("kmers") && sessionStorage.getItem("values")) {
-      this.kmers = sessionStorage.getItem("kmers");
-      this.values = JSON.parse(sessionStorage.getItem("values"));
+      this.seqIdandKmers = JSON.parse(sessionStorage.getItem("kmers"));
+      this.propertyValues = JSON.parse(sessionStorage.getItem("values"));
     }
     this.toVisual();
   },
   methods: {
     toVisual() {
-      // 基于准备好的dom，初始化echarts实例
+      let seqIdandKmers = this.seqIdandKmers;
+      let propertyValues = this.propertyValues;
+      let seqId = Object.keys(seqIdandKmers); // 获取序列id的数组
+      let property = Object.keys(propertyValues[seqId[0]]); // 获得选中的理化特性的数组
+      let height = 370; // 设每张图的高度
+      // 设置图标显示区域高度,一定要放在初始化实例前面
+      document.getElementById("vis").style.height =
+        height * seqId.length + 100 + "px";
+      document.getElementById("avg").style.height =
+        height * seqId.length + 100 + "px";
+      // 基于准备好的dom,初始化echarts实例
       let myChart = echarts.init(document.getElementById("myVisual"));
-      let kmers = this.kmers.split(","); // 将以逗号分隔的字符串转换为数组
-      let values = this.values;
-      //   console.log(values.length);  // undefined
-      //   let property = [];
-      //   let key = "";
-      //   for (key in values) {
-      //     property.push(key);
-      //   }
-      let property = Object.keys(values); // 获得键值数组
+
+      let title = [];
+      let grid = [];
+      let xAxis = [];
+      let yAxis = [];
+      let dataZoom = [];
       let series = [];
-      for (let i = 0; i < property.length; i++) {
-        series.push({
-          name: property[i],
-          type: "line",
-          data: values[property[i]],
-          markPoint: {
-            data: [
-              { type: "max", name: "maximum" },
-              { type: "min", name: "minimum" }
-            ]
-          },
-          markLine: {
-            data: [{ type: "average", name: "average" }]
+
+      for (let i = 0; i < seqId.length; i++) {
+        // console.log(seqIdandKmers[seqId[i]]);
+        // 设置标题组件
+        title.push({
+          text: seqId[i],
+          top: height * i,
+          textStyle: {
+            fontWeight: "bold",
+            fontSize: 16
           }
         });
+        // 设置网格位置
+        grid.push({
+          left: "7%",
+          right: "7%",
+          top: height * i + 50,
+          height: 270
+        });
+        // 设置grid中的x轴
+        xAxis.push({
+          gridIndex: i,
+          data: seqIdandKmers[seqId[i]] // 序列号为seqId[i]的序列的kmers
+        });
+        // 设置grid中的y轴
+        yAxis.push({
+          gridIndex: i,
+          type: "value"
+        });
+        // 设置缩放
+        dataZoom.push(
+          // 为x轴增加滚动条
+          {
+            type: "slider",
+            show: true,
+            xAxisIndex: [i],
+            left: "7%",
+            top: height * i + 325,
+            start: 0,
+            end: 100,
+            height: 20 // 可以设定高度
+          },
+          // 为y轴增加滚动条
+          {
+            type: "slider",
+            show: true,
+            yAxisIndex: [i],
+            left: "94%",
+            start: 0,
+            end: 100,
+            width: 20, // 可以设定宽度
+            showDataShadow: false // 纵轴不需要反映数据的走势
+          },
+          // 可以在图内进行数据的缩放
+          {
+            type: "inside",
+            xAxisIndex: i,
+            start: 0,
+            end: 100
+          },
+          {
+            type: "inside",
+            yAxisIndex: i,
+            start: 0,
+            end: 100
+          }
+        );
+        // 设置图表类型
+        for (let j = 0; j < property.length; j++) {
+          series.push({
+            type: "line",
+            name: property[j],
+            xAxisIndex: i,
+            yAxisIndex: i,
+            connectNulls: true, // 连接空数据
+            smooth: true, // 折线拐点处做平滑处理
+            data: propertyValues[seqId[i]][property[j]],
+            markPoint: {
+              symbol: "pin",
+              symbolSize: 30,
+              data: [
+                { name: "maximum", type: "max" },
+                { name: "minimum", type: "min" }
+              ]
+            },
+            markLine: {
+              data: [{ type: "average", name: "average" }],
+              precision: 3
+            }
+          });
+        }
       }
+
       let option = {
         // 图的标题
-        title: {
-          text: "Visualization of Results"
-          //   subtext: "physicochemical properties"
+        title: title,
+        // 图例组件
+        legend: {
+          type: "scroll", // 可翻滚翻页的图例。当图例数量较多时可以使用
+          left: "100",
+          top: "25",
+          data: property // 这里应该是从convert页面传过来的选中的理化特性
         },
+        grid: grid,
+        xAxis: xAxis,
+        yAxis: yAxis,
+        dataZoom: dataZoom,
         // 鼠标悬停时的提示语
         tooltip: {
           trigger: "axis",
@@ -86,24 +189,17 @@ export default {
             }
           }
         },
-        // 图例
-        legend: {
-          data: property, // 这里应该是从convert页面传过来的选中的理化特性
-          type: "scroll", // 当图例数量过多时，分页显示图例，参考wang
-          top: "5%",
-          left: "100"
-        },
         // 工具栏
         toolbox: {
           show: true,
           feature: {
-            // 缩放和缩放还原 但是不知道效果是什么，所以这里就不添加了
-            // dataZoom: {
-            //   title: {
-            //     zoom: "Zoom In Area",
-            //     back: "Restore Zoom"
-            //   }
-            // },
+            // 数据区域缩放
+            dataZoom: {
+              title: {
+                zoom: "Area Zooming",
+                back: "Restore Area Zooming"
+              }
+            },
             // 数据视图 点击可以显示数据
             dataView: {
               show: true,
@@ -122,56 +218,135 @@ export default {
             },
             // 还原
             restore: {
-              show: true,
               title: "Restore"
             },
             // 保存成图片
             saveAsImage: {
-              show: true,
               title: "Save"
             }
           }
         },
-        // 横轴
-        xAxis: [
-          {
-            type: "category",
-            data: kmers
+        series: series
+      };
+      myChart.setOption(option);
+
+      this.average(seqId, property, seqIdandKmers, propertyValues);
+    },
+    // 画出平均值的曲线 (平均值：所有序列kmers对应位置上的值求平均), seqId: 序列id, property: 选中的理化特性
+    average(seqId, property, seqIdandKmers, propertyValues) {
+      // 初始化实例
+      let avgVisual = echarts.init(document.getElementById("averageVisual"));
+
+      let avgValues = {}; // {"理化特性":[平均值数组],"":[], ...}
+      let positions = seqIdandKmers[seqId[0]].length; //所有序列的最小kmers数
+      for (let i = 1; i < seqId.length; i++) {
+        let len = seqIdandKmers[seqId[i]].length;
+        if (len <= positions) positions = len;
+      }
+      // console.log(Array.from(new Array(positions).keys()));
+      for (let i = 0; i < property.length; i++) {
+        let avg = [];
+        for (let j = 0; j < positions; j++) {
+          let sum = 0;
+          for (let m = 0; m < seqId.length; m++) {
+            sum += propertyValues[seqId[m]][property[i]][j];
           }
-        ],
-        // 纵轴，数据类型为数值
-        yAxis: [
-          {
-            type: "value"
+          avg.push(Math.round((sum / seqId.length) * 1000) / 1000); //保留3位小数
+          // avg.push(sum / seqId.length); //保留3位小数
+        }
+        avgValues[property[i]] = avg;
+      }
+
+      let series = [];
+      // 设置图表类型
+      for (let j = 0; j < property.length; j++) {
+        series.push({
+          type: "line",
+          name: property[j],
+          connectNulls: true, // 连接空数据
+          smooth: true, // 折线拐点处做平滑处理
+          data: avgValues[property[j]],
+          markPoint: {
+            symbol: "pin",
+            symbolSize: 30,
+            data: [
+              { name: "maximum", type: "max" },
+              { name: "minimum", type: "min" }
+            ]
+          },
+          markLine: {
+            data: [{ type: "average", name: "average" }],
+            precision: 3
           }
-        ],
-        // 增加横纵坐标滚动条
+        });
+      }
+      let option = {
+        title: {
+          text: "Average values of all the sequences",
+          textStyle: {
+            fontWeight: "bold",
+            fontSize: 16
+          }
+        },
+        // 图例组件
+        legend: {
+          type: "scroll", // 可翻滚翻页的图例。当图例数量较多时可以使用
+          left: "100",
+          top: "25",
+          data: property // 这里应该是从convert页面传过来的选中的理化特性
+        },
+        // 设置网格位置
+        grid: {
+          left: "7%",
+          right: "7%",
+          top: 50,
+          height: 270
+        },
+        // 设置grid中的x轴
+        xAxis: {
+          data: Array.from(new Array(positions).keys()), // [0,1,2,3,..,positions-1]
+          name: "index of k-mers",
+          nameLocation: "middle",
+          nameGap: 30,
+          nameTextStyle: {
+            fontWeight: "bold",
+            fontSize: 14
+          }
+        },
+        // 设置grid中的y轴
+        yAxis: {
+          type: "value"
+        },
+        // 设置缩放
         dataZoom: [
           // 为x轴增加滚动条
           {
+            type: "slider",
             show: true,
             xAxisIndex: [0],
-            bottom: "2%",
-            start: 10,
-            end: 90,
+            left: "7%",
+            top: 325,
+            start: 0,
+            end: 100,
             height: 20 // 可以设定高度
           },
           // 为y轴增加滚动条
           {
+            type: "slider",
             show: true,
             yAxisIndex: [0],
-            left: "97%",
+            left: "94%",
             start: 0,
             end: 100,
             width: 20, // 可以设定宽度
-            showDataShadow: false
+            showDataShadow: false // 纵轴不需要反映数据的走势
           },
           // 可以在图内进行数据的缩放
           {
             type: "inside",
             xAxisIndex: 0,
-            start: 10,
-            end: 90
+            start: 0,
+            end: 100
           },
           {
             type: "inside",
@@ -180,9 +355,56 @@ export default {
             end: 100
           }
         ],
+        // 鼠标悬停时的提示语
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+            label: {
+              show: true
+            }
+          }
+        },
+        // 工具栏
+        toolbox: {
+          show: true,
+          feature: {
+            // 数据区域缩放
+            dataZoom: {
+              title: {
+                zoom: "Area Zooming",
+                back: "Restore Area Zooming"
+              }
+            },
+            // 数据视图 点击可以显示数据
+            dataView: {
+              show: true,
+              title: "Data View",
+              lang: ["Data View", "Close", "Update"],
+              readOnly: false
+            },
+            // 折线图 柱状图可以切换
+            magicType: {
+              show: true,
+              type: ["line", "bar"],
+              title: {
+                line: "Line Chart",
+                bar: "Bar Chart"
+              }
+            },
+            // 还原
+            restore: {
+              title: "Restore"
+            },
+            // 保存成图片
+            saveAsImage: {
+              title: "Save"
+            }
+          }
+        },
         series: series
       };
-      myChart.setOption(option);
+      avgVisual.setOption(option);
     }
   }
 };
@@ -213,9 +435,12 @@ export default {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 .visual {
-  width: 1000px;
-  height: 500px;
-  margin: 10px auto;
+  width: 50%;
+  /* margin: 10px auto; */
+  /* height: 10px; */
   background: #ffe4e1;
+}
+#avg {
+  border-left: 2px solid white;
 }
 </style>
