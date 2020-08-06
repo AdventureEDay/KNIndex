@@ -1,5 +1,5 @@
 # KNIndex
-A comprehensive database of k-nucleotide physicochemical property values
+A comprehensive database of *k*-nucleotide physicochemical property values
 
 ## Project setup
 If you want to run these codes in the development environment, you should install **Node.js** and **MySQL** first on your machine.
