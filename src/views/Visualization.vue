@@ -61,7 +61,7 @@
           border
           stripe
           :show-header="status"
-          empty-text="Select the above parameters to obtain the physicochemical properties first."
+          empty-text="Select the above parameters to obtain the physicochemical properties."
           style="width: 100%"
         >
           <el-table-column type="index" width="40"> </el-table-column>
