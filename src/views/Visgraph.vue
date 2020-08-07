@@ -7,20 +7,20 @@
       />
       Visualization
     </el-row>
-    <el-row>
-      <el-col class="visual" id="vis">
-        <div
-          id="myVisual"
-          style="width: 95%; height: 100%; margin: 0 auto; left: 5px; padding: 5px;"
-        ></div>
-      </el-col>
-      <el-col class="visual" id="avg">
-        <div
-          id="averageVisual"
-          style="width: 95%; height: 100%; margin: 0 auto; left: 5px; padding: 5px;"
-        ></div>
-      </el-col>
-    </el-row>
+    <div class="button">
+      <input
+        type="button"
+        :value="textTip"
+        class="change"
+        @click="toVisual()"
+      />
+    </div>
+    <div class="visual" :id="graph">
+      <div
+        id="myVisual"
+        style="width: 95%; height: 100%; margin: 0 auto;"
+      ></div>
+    </div>
   </div>
 </template>
 
@@ -31,7 +31,9 @@ export default {
   data() {
     return {
       seqIdandKmers: {},
-      propertyValues: {}
+      propertyValues: {},
+      graph: "vis",
+      textTip: "Get average"
     };
   },
   mounted() {
@@ -53,6 +55,20 @@ export default {
   },
   methods: {
     toVisual() {
+      switch (this.graph) {
+        case "vis":
+          this.multiple();
+          this.graph = "avg";
+          this.textTip = "Get average";
+          break;
+        case "avg":
+          this.average();
+          this.graph = "vis";
+          this.textTip = "Get multiple";
+          break;
+      }
+    },
+    multiple() {
       let seqIdandKmers = this.seqIdandKmers;
       let propertyValues = this.propertyValues;
       let seqId = Object.keys(seqIdandKmers); // 获取序列id的数组
@@ -61,11 +77,11 @@ export default {
       // 设置图标显示区域高度,一定要放在初始化实例前面
       document.getElementById("vis").style.height =
         height * seqId.length + 100 + "px";
-      document.getElementById("avg").style.height =
-        height * seqId.length + 100 + "px";
-      // 基于准备好的dom,初始化echarts实例
-      let myChart = echarts.init(document.getElementById("myVisual"));
-
+      // 基于准备好的dom,初始化echarts实例, 这里使用svg渲染, 没有使用convas渲染,下载的图为矢量图
+      let myChart = echarts.init(document.getElementById("myVisual"), null, {
+        renderer: "svg"
+      });
+      myChart.resize(); // 这句话一定要有, 否则高度不变
       let title = [];
       let grid = [];
       let xAxis = [];
@@ -222,21 +238,31 @@ export default {
             },
             // 保存成图片
             saveAsImage: {
-              title: "Save"
+              title: "Save",
+              type: "svg"
+              // pixelRatio: 3 // 下载图片的分辨率
             }
           }
         },
-        series: series
+        series: series,
+        backgroundColor: "#ffe4e1"
       };
-      myChart.setOption(option);
-
-      this.average(seqId, property, seqIdandKmers, propertyValues);
+      myChart.setOption(option, true);
     },
     // 画出平均值的曲线 (平均值：所有序列kmers对应位置上的值求平均), seqId: 序列id, property: 选中的理化特性
-    average(seqId, property, seqIdandKmers, propertyValues) {
+    average() {
+      let seqIdandKmers = this.seqIdandKmers;
+      let propertyValues = this.propertyValues;
+      let seqId = Object.keys(seqIdandKmers); // 获取序列id的数组
+      let property = Object.keys(propertyValues[seqId[0]]); // 获得选中的理化特性的数组
+      let height = 370; // 设每张图的高度
+      // 设置图标显示区域高度,一定要放在初始化实例前面
+      document.getElementById("avg").style.height = height + 50 + "px";
       // 初始化实例
-      let avgVisual = echarts.init(document.getElementById("averageVisual"));
-
+      let avgVisual = echarts.init(document.getElementById("myVisual"), null, {
+        renderer: "svg"
+      });
+      avgVisual.resize(); // 这句话一定要有, 否则高度不变
       let avgValues = {}; // {"理化特性":[平均值数组],"":[], ...}
       let positions = seqIdandKmers[seqId[0]].length; //所有序列的最小kmers数
       for (let i = 1; i < seqId.length; i++) {
@@ -398,13 +424,16 @@ export default {
             },
             // 保存成图片
             saveAsImage: {
-              title: "Save"
+              title: "Save",
+              type: "svg"
+              // pixelRatio: 3 // 下载图片的分辨率
             }
           }
         },
-        series: series
+        series: series,
+        backgroundColor: "#ffe4e1"
       };
-      avgVisual.setOption(option);
+      avgVisual.setOption(option, true);
     }
   }
 };
@@ -434,13 +463,28 @@ export default {
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
+
+.button,
 .visual {
-  width: 50%;
-  /* margin: 10px auto; */
-  /* height: 10px; */
+  width: 70%;
+  margin: 0 auto;
   background: #ffe4e1;
 }
-#avg {
-  border-left: 2px solid white;
+
+.button {
+  border-bottom: 2px solid white;
+}
+
+.change {
+  margin: 20px auto;
+  font-size: 16px;
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #e6a23c;
+  border: #e6a23c;
+  outline: none;
+  cursor: pointer; /* 鼠标滑过时, 变为手型*/
 }
 </style>

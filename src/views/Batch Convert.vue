@@ -18,7 +18,7 @@
         label-position="left"
         label-suffix=":"
       >
-        <el-form-item label="Kmer" prop="kmer">
+        <el-form-item label="K-mer" prop="kmer">
           <el-radio-group v-model="form.kmer" @change="changeSequence">
             <el-radio label="mono">mononucleotide</el-radio>
             <el-radio label="di">dinucleotide</el-radio>
@@ -667,6 +667,8 @@ var object2object = function(objectArray, length, rows) {
   color: #fff;
   background-color: #5cb85c;
   margin: auto 30px;
+  outline: none;
+  cursor: pointer;
 }
 
 // 选择文件的原始按钮
@@ -678,6 +680,7 @@ var object2object = function(objectArray, length, rows) {
   left: 30px;
   top: 20px;
   opacity: 0; // 设为透明
+  cursor: pointer;
 }
 
 .submit {
@@ -689,6 +692,8 @@ var object2object = function(objectArray, length, rows) {
   background-color: #337ab7;
   border: #337ab7;
   margin: auto 10px; // 按钮居中
+  outline: none;
+  cursor: pointer;
 }
 
 .myemail {

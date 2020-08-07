@@ -18,7 +18,7 @@
         label-position="left"
         label-suffix=":"
       >
-        <el-form-item label="Kmer" prop="kmer">
+        <el-form-item label="K-mer" prop="kmer">
           <el-radio-group v-model="form.kmer" @change="changeSequence">
             <el-radio label="mono">mononucleotide</el-radio>
             <el-radio label="di">dinucleotide</el-radio>
@@ -201,7 +201,7 @@
                     <input
                       type="button"
                       value="Example"
-                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #337ab7; border: #337ab7"
+                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #337ab7; border: #337ab7;outline:none;cursor: pointer;"
                       @click="getExample"
                     />
                   </td>
@@ -209,7 +209,7 @@
                     <input
                       type="button"
                       value="Get value"
-                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #5cb85c; border: #5cb85c"
+                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #5cb85c; border: #5cb85c;outline:none;cursor: pointer;"
                       @click="getValue('form')"
                     />
                   </td>
@@ -217,7 +217,7 @@
                     <input
                       type="button"
                       value="Visualize"
-                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #e6a23c; border: #e6a23c"
+                      style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #e6a23c; border: #e6a23c;outline:none;cursor: pointer;"
                       @click="toVisual"
                     />
                   </td>
