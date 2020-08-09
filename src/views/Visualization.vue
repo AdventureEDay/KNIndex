@@ -476,7 +476,7 @@ export default {
           let sequences = []; // 序列数组
           if (ids.length > 5) {
             alert(
-              "The number of DNA/RNA sequences exceeds 5. The delay of this procedure will increase."
+              "The number of DNA/RNA sequences exceeds 5. The delay of this procedure will increase. We suggest the number should be less than 10."
             );
           }
           let inputSequence;

@@ -32,6 +32,8 @@ export default {
     return {
       seqIdandKmers: {},
       propertyValues: {},
+      // graph: "avg",
+      // textTip: "Get multiple"
       graph: "vis",
       textTip: "Get average"
     };
@@ -58,13 +60,13 @@ export default {
       switch (this.graph) {
         case "vis":
           this.multiple();
-          this.graph = "avg";
           this.textTip = "Get average";
+          this.graph = "avg";
           break;
         case "avg":
           this.average();
-          this.graph = "vis";
           this.textTip = "Get multiple";
+          this.graph = "vis";
           break;
       }
     },
@@ -73,14 +75,17 @@ export default {
       let propertyValues = this.propertyValues;
       let seqId = Object.keys(seqIdandKmers); // 获取序列id的数组
       let property = Object.keys(propertyValues[seqId[0]]); // 获得选中的理化特性的数组
+      // console.log(property);
       let height = 370; // 设每张图的高度
       // 设置图标显示区域高度,一定要放在初始化实例前面
       document.getElementById("vis").style.height =
         height * seqId.length + 100 + "px";
-      // 基于准备好的dom,初始化echarts实例, 这里使用svg渲染, 没有使用convas渲染,下载的图为矢量图
-      let myChart = echarts.init(document.getElementById("myVisual"), null, {
-        renderer: "svg"
-      });
+      // 基于准备好的dom,初始化echarts实例
+      let myChart = echarts.init(document.getElementById("myVisual"));
+      // 这里使用svg渲染, 没有使用convas渲染,下载的图为矢量图, 但是当图例数量过多时,不显示图例名字
+      // let myChart = echarts.init(document.getElementById("myVisual"), null, {
+      //   renderer: "svg"
+      // });
       myChart.resize(); // 这句话一定要有, 否则高度不变
       let title = [];
       let grid = [];
@@ -162,6 +167,7 @@ export default {
             name: property[j],
             xAxisIndex: i,
             yAxisIndex: i,
+            symbol: "circle", //图例变成实心圆
             connectNulls: true, // 连接空数据
             smooth: true, // 折线拐点处做平滑处理
             data: propertyValues[seqId[i]][property[j]],
@@ -239,8 +245,8 @@ export default {
             // 保存成图片
             saveAsImage: {
               title: "Save",
-              type: "svg"
-              // pixelRatio: 3 // 下载图片的分辨率
+              // type: "svg"
+              pixelRatio: 3 // 下载图片的分辨率
             }
           }
         },
@@ -248,6 +254,7 @@ export default {
         backgroundColor: "#ffe4e1"
       };
       myChart.setOption(option, true);
+      window.onresize = myChart.resize; // 当窗口大小发生变化时,可以使图表自适应大小
     },
     // 画出平均值的曲线 (平均值：所有序列kmers对应位置上的值求平均), seqId: 序列id, property: 选中的理化特性
     average() {
@@ -259,9 +266,7 @@ export default {
       // 设置图标显示区域高度,一定要放在初始化实例前面
       document.getElementById("avg").style.height = height + 50 + "px";
       // 初始化实例
-      let avgVisual = echarts.init(document.getElementById("myVisual"), null, {
-        renderer: "svg"
-      });
+      let avgVisual = echarts.init(document.getElementById("myVisual"));
       avgVisual.resize(); // 这句话一定要有, 否则高度不变
       let avgValues = {}; // {"理化特性":[平均值数组],"":[], ...}
       let positions = seqIdandKmers[seqId[0]].length; //所有序列的最小kmers数
@@ -291,6 +296,7 @@ export default {
           name: property[j],
           connectNulls: true, // 连接空数据
           smooth: true, // 折线拐点处做平滑处理
+          symbol: "circle",
           data: avgValues[property[j]],
           markPoint: {
             symbol: "pin",
@@ -331,7 +337,7 @@ export default {
         // 设置grid中的x轴
         xAxis: {
           data: Array.from(new Array(positions).keys()), // [0,1,2,3,..,positions-1]
-          name: "index of k-mers",
+          name: "position",
           nameLocation: "middle",
           nameGap: 30,
           nameTextStyle: {
@@ -425,8 +431,8 @@ export default {
             // 保存成图片
             saveAsImage: {
               title: "Save",
-              type: "svg"
-              // pixelRatio: 3 // 下载图片的分辨率
+              // type: "svg"
+              pixelRatio: 3 // 下载图片的分辨率
             }
           }
         },
@@ -434,6 +440,7 @@ export default {
         backgroundColor: "#ffe4e1"
       };
       avgVisual.setOption(option, true);
+      window.onresize = avgVisual.resize;
     }
   }
 };
