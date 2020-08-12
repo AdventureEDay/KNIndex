@@ -51,7 +51,7 @@
             <el-option label="15" :value="15"></el-option>
             <el-option label="20" :value="20"></el-option>
             <el-option label="25" :value="25"></el-option>
-            <el-option label="30" :value="30"></el-option>
+            <!-- <el-option label="30" :value="30"></el-option> -->
           </el-select>
         </el-form-item>
         <!-- 理化特性选择区 根据参数读取数据库，根据返回来的数值取理化性质-->
@@ -218,7 +218,7 @@
                       type="button"
                       value="Visualize"
                       style="font-size: 16px; height: 40px; width: 100px; border-radius: 5px; color: #fff; background-color: #e6a23c; border: #e6a23c;outline:none;cursor: pointer;"
-                      @click="toVisual"
+                      @click="toVisual('form')"
                     />
                   </td>
                 </tr>
@@ -238,6 +238,7 @@
             <tr>
               <td>
                 <el-input
+                  class="results"
                   type="textarea"
                   placeholder="The final conversion results."
                   v-model="form.outputValue"
@@ -256,6 +257,7 @@
 
 <script>
 import axios from "axios";
+// import { Loading } from "element-ui";
 
 export default {
   data() {
@@ -301,7 +303,7 @@ export default {
       //kmersVisual: [], // 单个序列时, kmers数组, 传递给可视化页面
       kmersVisual: {}, // 多个序列时, {"序列id":[kmers数组],"序列id":[kmers数组], ...}
       //valuesVisual: {}, // {"理化特性":[值的数组],"理化特性":[值的数组], ...}
-      valuesVisual: {} // 多个序列, {"序列id":{"理化特性":[值的数组],"理化特性":[值的数组], ...},"序列id":{}, ...}
+      valuesVisual: [] // 多个序列, {"序列id":{"理化特性":[值的数组],"理化特性":[值的数组], ...},"序列id":{}, ...} setItem可能超额 【20200811】改成了将选择的理化特性传到新页面
     };
   },
 
@@ -327,9 +329,9 @@ export default {
         var _this = this;
         // 监听前3个参数，发生变化则清空下面的内容
         _this.form.propertyid = [];
-        _this.form.inputSequence = "";
-        _this.form.outputkmers = "";
-        _this.form.outputValue = "";
+        // _this.form.inputSequence = "";
+        // _this.form.outputkmers = "";
+        // _this.form.outputValue = "";
 
         if (val.kmer != "" && val.nucleic != "" && val.value != "") {
           var myAPI = "/api/property/" + val.kmer + val.nucleic + val.value;
@@ -388,7 +390,9 @@ export default {
       var _this = this;
       var formData = _this.form;
       if (formData.nucleic == "") {
-        alert("Please choose parameters first!");
+        this.$alert("Please choose parameters.", {
+          confirmButtonText: "confirm"
+        });
       } else if (formData.nucleic == "dna") {
         _this.form.inputSequence =
           ">example for DNA\nGGCCAGGGGCATAGAGCTGGCCAAGGAGCCATGGCTCACTAACGTGTTGTATGGGGCTCCTTCCCTTCAGGTCCAGGCTCCTGCGTGAAGTGATGCTCCTCTTTGCCTTACTCCTAGCCATGGAGCTCCCATTGGTGGCA";
@@ -402,6 +406,7 @@ export default {
     handleInputSequence(inputSequence) {
       // 首先将输入的序列按照">"分割成数组
       let inputs = inputSequence.split(">");
+      // console.log(inputs);
       // 然后将数组转换成字典格式, key: 序列id, value: 序列串
       let i = 0;
       let dict = {};
@@ -417,11 +422,14 @@ export default {
           value = inputs[i].substring(index + 1);
           value = value.replace(/[\n\r]/g, ""); // 去掉序列中所有的回车换行符
           if (index == -1 || value == "") {
-            // index==-1:只有序列id, 且序列id后没有换行符；value=="":只有序列id, 没有序列内容
-            alert(
-              "The sequence after " +
+            // index==-1:只有序列id, 且序列id后没有换行符；value=="":去除了序列中间所有的换行符后没有内容
+            this.$alert(
+              "The sequence near " +
                 prevKey +
-                " is not in FASTA format. We will ignore it."
+                " is not in FASTA format. We will ignore it.",
+              {
+                confirmButtonText: "confirm"
+              }
             );
             continue;
           }
@@ -448,37 +456,44 @@ export default {
       return kmers;
     },
 
+    // 点击getValue按钮
     getValue(formName) {
       let _this = this;
       this.$refs[formName].validate(valid => {
         // 验证前三个参数的有效性
         if (valid) {
-          // 判断输入框中是否有序列内容
-          if (_this.form.inputSequence == "") {
-            alert(
-              "Please input at least one FASTA format nucleotide sequence first!"
+          // 判断输入框中是否有序列内容, 并且判断是否是FASTA格式
+          if (
+            _this.form.inputSequence == "" ||
+            _this.form.inputSequence.indexOf(">") == -1
+          ) {
+            this.$alert(
+              "Please input at least one FASTA format nucleotide sequence.",
+              {
+                confirmButtonText: "confirm"
+              }
             );
             return false;
           }
-          // 判断输入的序列是否是FASTA格式
-          if (_this.form.inputSequence.indexOf(">") == -1) {
-            alert("Please ensure the format of input is FASTA!");
+          // 判断是否选择了理化特性--------------------------------------
+          let propertyid = _this.form.propertyid;
+          if (propertyid.length == 0) {
+            this.$alert(
+              "Please choose at least one physicochemical property.",
+              {
+                confirmButtonText: "confirm"
+              }
+            );
             return false;
           }
           // 变量赋值
           let property = _this.form.properties.property;
-          let propertyid = _this.form.propertyid;
           let kmer = _this.form.kmer;
           let inputDict = _this.handleInputSequence(_this.form.inputSequence);
-
-          // 如果输入序列超过5时, 加一个用时提醒
           let ids = Object.keys(inputDict); // 序列id数组
+
+          // 获取序列数组
           let sequences = []; // 序列数组
-          if (ids.length > 5) {
-            alert(
-              "The number of DNA/RNA sequences exceeds 5. The delay of this procedure will increase. We suggest the number should be less than 10."
-            );
-          }
           let inputSequence;
           for (let key in inputDict) {
             // 如果输入的有小写，那么要将所有字母转换为大写，因为数值文件中都是大写
@@ -487,16 +502,9 @@ export default {
           }
 
           // 判断输入串中是否只包含ATCG或者AUCG 【20200805 删除了这一部分】
-
-          // let tmpProperty = {};
+          // 截取propertyid对应的对象--------------------------------
+          let i, j;
           let tmpProperty = []; // [{},{},{},...] 选择的physicochemical property的对象数组
-          if (propertyid.length == 0) {
-            alert("Please choose at least one physicochemical property!");
-            return false;
-          }
-          // 截取propertyid对应的对象
-          let i = 0;
-          let j = 0;
           for (i = 0; i < propertyid.length; i++) {
             let t = propertyid[i];
             for (j = 0; j < property.length; j++) {
@@ -507,25 +515,20 @@ export default {
             tmpProperty.push(property[j]);
           }
 
-          // 输入的序列按照kmer进行拆分成kmers---------------------------------
-          let tmpKmers = {};
-          let tmpNumerical = {};
+          // 获取值序列的过程--------------------------------------
           let kmers;
           let outputK = "";
           let output = "";
           for (i = 0; i < ids.length; i++) {
             kmers = _this.toKmers(sequences[i], kmer);
-            tmpKmers[ids[i]] = kmers;
             outputK = outputK + "# " + ids[i] + "\n" + kmers.join(" ") + "\n";
 
-            // 对每个kmers序列获取值序列
-            let visual = {};
+            // 对每个kmers序列, 每个理化特性获取值序列
             for (j = 0; j < tmpProperty.length; j++) {
               let tmpValue = [];
               for (let p = 0; p < kmers.length; p++) {
                 tmpValue.push(tmpProperty[j][kmers[p]]);
               }
-              visual[tmpProperty[j].PropertyName] = tmpValue;
               output =
                 output +
                 "# " +
@@ -538,21 +541,179 @@ export default {
                 tmpValue.join(" ") +
                 "\n";
             }
-            // tmpNumerical.push(visual);
-            tmpNumerical[ids[i]] = visual;
           }
-          _this.kmersVisual = tmpKmers;
-          _this.valuesVisual = tmpNumerical;
           _this.form.outputkmers = outputK;
           _this.form.outputValue = output;
+          if (outputK.length > 150000) {
+            alert("Please wait for the results for a moment.");
+          }
         } else {
-          alert("Please choose parameters first!");
+          this.$alert("Please choose parameters.", {
+            confirmButtonText: "confirm"
+          });
           return false;
         }
       });
     },
 
-    toVisual() {
+    // 点击Visualize按钮
+    assistVisual(property, kmer, inputDict, propertyid, ids) {
+      // 获取序列数组-----------------------------------
+      let sequences = []; // 序列数组
+      let inputSequence;
+      // key是序列id
+      for (let key in inputDict) {
+        // 如果输入的有小写，那么要将所有字母转换为大写，因为数值文件中都是大写
+        inputSequence = inputDict[key].toUpperCase();
+        sequences.push(inputSequence);
+      }
+
+      // 截取propertyid对应的对象------------------------
+      let tmpProperty = []; // [{},{},{},...] 选择的physicochemical property的对象数组
+      let i, j;
+      for (i = 0; i < propertyid.length; i++) {
+        let t = propertyid[i];
+        for (j = 0; j < property.length; j++) {
+          if (property[j].ID == t) {
+            break;
+          }
+        }
+        tmpProperty.push(property[j]);
+      }
+
+      // 获取值序列的过程---------------------------------
+      let tmpKmers = {};
+      let kmers;
+      for (i = 0; i < ids.length; i++) {
+        kmers = this.toKmers(sequences[i], kmer);
+        tmpKmers[ids[i]] = kmers;
+      }
+      this.kmersVisual = tmpKmers;
+      this.valuesVisual = tmpProperty;
+    },
+
+    toVisual(formName) {
+      let _this = this;
+      this.$refs[formName].validate(valid => {
+        // 验证前三个参数的有效性
+        if (valid) {
+          // 首先判断输入框中是否有序列内容, 并且判断是否是FASTA格式------
+          if (
+            _this.form.inputSequence == "" ||
+            _this.form.inputSequence.indexOf(">") == -1
+          ) {
+            this.$alert(
+              "Please input at least one FASTA format nucleotide sequence.",
+              {
+                confirmButtonText: "confirm"
+              }
+            );
+            return false;
+          }
+
+          // 判断是否选择了理化特性--------------------------------------
+          let propertyid = _this.form.propertyid;
+          if (propertyid.length == 0) {
+            this.$alert(
+              "Please choose at least one physicochemical property.",
+              {
+                confirmButtonText: "confirm"
+              }
+            );
+            return false;
+          }
+
+          // 在序列个数小于等于30的时候给出提示信息, 点击确认后处理数据, 传参跳转页面
+          let inputDict = _this.handleInputSequence(_this.form.inputSequence);
+          let ids = Object.keys(inputDict); // 序列id数组
+          if (ids.length > 30) {
+            _this
+              .$confirm(
+                "The number of DNA/RNA sequences exceeds 30. The delay of this procedure will increase. We suggest the number should be less than 30. In the next page, we will provide multiple curves of the first 30 sequences and mean curves of all the sequences.",
+                {
+                  confirmButtonText: "confirm",
+                  cancelButtonText: "cancel",
+                  type: "warning"
+                }
+              )
+              .then(() => {
+                let property = _this.form.properties.property;
+                let kmer = _this.form.kmer;
+                // 获取要传递的参数
+                _this.assistVisual(property, kmer, inputDict, propertyid, ids);
+                // 传参
+                let routeUrl = _this.$router.resolve({
+                  name: "Visualizationgraph"
+                });
+                // 以JSON串的形式传递参数
+                try {
+                  sessionStorage.setItem(
+                    "kmers",
+                    JSON.stringify(_this.kmersVisual)
+                  );
+                  sessionStorage.setItem(
+                    "values",
+                    JSON.stringify(_this.valuesVisual)
+                  );
+                  window.open(routeUrl.href, "_blank");
+                } catch (err) {
+                  if (err.name.toUpperCase().indexOf("QUOTA") >= 0) {
+                    _this.$confirm(
+                      "The size of the DNA/RNA sequences you enter is too large. Please cut down it.",
+                      {
+                        confirmButtonText: "confirm",
+                        showCancelButton: false,
+                        type: "warning"
+                      }
+                    );
+                  }
+                }
+              })
+              .catch(() => {
+                _this.$message({
+                  type: "info",
+                  message: "Cancel"
+                });
+              });
+          } else {
+            let property = _this.form.properties.property;
+            let kmer = _this.form.kmer;
+            // 获取要传递的参数
+            _this.assistVisual(property, kmer, inputDict, propertyid, ids);
+            // 传参
+            let routeUrl = _this.$router.resolve({
+              name: "Visualizationgraph"
+            });
+            try {
+              sessionStorage.setItem(
+                "kmers",
+                JSON.stringify(_this.kmersVisual)
+              );
+              sessionStorage.setItem(
+                "values",
+                JSON.stringify(_this.valuesVisual)
+              );
+              window.open(routeUrl.href, "_blank");
+            } catch (err) {
+              if (err.name.toUpperCase().indexOf("QUOTA") >= 0) {
+                _this.$confirm(
+                  "The size of the DNA/RNA sequences you enter is too large. Please cut down it.",
+                  {
+                    confirmButtonText: "confirm",
+                    showCancelButton: false,
+                    type: "warning"
+                  }
+                );
+              }
+            }
+          }
+        } else {
+          this.$alert("Please choose parameters.", {
+            confirmButtonText: "confirm"
+          });
+          return false;
+        }
+      });
       // let _this = this;
       // 这种不支持在新窗口打开
       // console.log(_this.form.outputkmers);
@@ -574,34 +735,9 @@ export default {
       //   }
       // });
       // window.open(routeUrl.href, "_blank");
-
-      // 在不按"Get value"按钮时也可以有可视化的结果
-      this.getValue("form");
-      let inputSequence = this.form.inputSequence;
-      // if判断语句可以保证在没有输入序列的情况下，点击可视化按钮不跳转页面
-      if (
-        inputSequence != "" &&
-        inputSequence.indexOf(">") != -1 &&
-        this.form.propertyid.length != 0
-      ) {
-        // 判断输入串中是否只包含ATCG或者AUCG 【20200805 删除了这一部分】
-        let routeUrl = this.$router.resolve({
-          name: "Visualizationgraph"
-        });
-
-        // 以JSON串的形式传递参数
-        // localStorage.setItem("kmers", this.kmersVisual);
-        // localStorage.setItem("values", JSON.stringify(this.valuesVisual));
-
-        sessionStorage.setItem("kmers", JSON.stringify(this.kmersVisual));
-        sessionStorage.setItem("values", JSON.stringify(this.valuesVisual));
-        // console.log(JSON.stringify(this.kmersVisual));
-        // console.log(JSON.stringify(this.valuesVisual));
-        window.open(routeUrl.href, "_blank");
-      }
     },
 
-    // 判断一个输入序列中是否只含有ATCG
+    // 判断一个输入序列中是否只含有ATCG, 没用到这个函数
     hasT(sequence) {
       sequence.toUpperCase();
       let reg = /^[ATCG]+$/;
@@ -613,7 +749,7 @@ export default {
       }
     },
 
-    // 判断一个输入序列中是否只含有AUCG
+    // 判断一个输入序列中是否只含有AUCG, 没用到这个函数
     hasU(sequence) {
       sequence.toUpperCase();
       let reg = /^[AUCG]+$/;
@@ -800,5 +936,10 @@ var object2object = function(objectArray, length, rows) {
 
 .el-select-dropdown__item.selected {
   color: rgb(115, 200, 200);
+}
+
+.el-select-dropdown__item {
+  text-align: center;
+  text-indent: 0;
 }
 </style>
