@@ -51,7 +51,7 @@
             <el-option label="15" :value="15"></el-option>
             <el-option label="20" :value="20"></el-option>
             <el-option label="25" :value="25"></el-option>
-            <el-option label="30" :value="30"></el-option>
+            <!-- <el-option label="30" :value="30"></el-option> -->
           </el-select>
         </el-form-item>
         <!-- 理化特性选择区 根据参数读取数据库，根据返回来的数值取理化性质-->
@@ -366,7 +366,9 @@ export default {
       let index = filename.lastIndexOf(".");
       let suffix = filename.substr(index + 1);
       if (!this.isFastaFile(suffix)) {
-        alert("Please select a fasta file (.fasta, .fas, .fa)!");
+        this.$alert("Please select a fasta file (.fasta, .fas, .fa).", {
+          confirmButtonText: "confirm"
+        });
         return false;
       }
       this.file = file;
@@ -385,19 +387,25 @@ export default {
       // 验证前三个参数的有效性
       this.$refs[formName].validate(valid => {
         if (!valid) {
-          alert("Please choose parameters first!");
+          this.$alert("Please choose parameters.", {
+            confirmButtonText: "confirm"
+          });
           return false;
         }
       });
       if (this.file == "") {
-        alert("Please select a fasta format file!");
+        this.$alert("Please select a fasta format file.", {
+          confirmButtonText: "confirm"
+        });
         return false;
       }
       let property = _this.form.properties.property;
       let propertyid = _this.form.propertyid;
 
       if (propertyid.length == 0) {
-        alert("Please choose at least one physicochemical property!");
+        this.$alert("Please choose at least one physicochemical property.", {
+          confirmButtonText: "confirm"
+        });
         return false;
       }
       // console.log(property);
@@ -646,6 +654,10 @@ var object2object = function(objectArray, length, rows) {
   color: rgb(115, 200, 200);
 }
 
+.el-select-dropdown__item {
+  text-align: center;
+  text-indent: 0;
+}
 // /deep/ .el-input {
 //   width: 60%;
 //   margin-left: 10px;
