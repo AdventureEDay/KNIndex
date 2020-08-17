@@ -245,6 +245,14 @@
                   >
                     {{ scope.row.ReferID }}
                   </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
                   <a v-else :href="url + scope.row.PubMedID" target="_black">
                     {{ scope.row.ReferID }}
                   </a>
@@ -301,6 +309,14 @@
                     v-else-if="scope.row.ReferID == 'REID0030'"
                     :href="reid0030"
                     target="_black"
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
                   >
                     {{ scope.row.ReferID }}
                   </a>
@@ -366,6 +382,14 @@
                   >
                     {{ scope.row.ReferID }}
                   </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
                   <a v-else :href="url + scope.row.PubMedID" target="_black">
                     {{ scope.row.ReferID }}
                   </a>
@@ -424,6 +448,14 @@
                     v-else-if="scope.row.ReferID == 'REID0030'"
                     :href="reid0030"
                     target="_black"
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
                   >
                     {{ scope.row.ReferID }}
                   </a>
@@ -487,6 +519,14 @@
                   >
                     {{ scope.row.ReferID }}
                   </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
                   <a v-else :href="url + scope.row.PubMedID" target="_black">
                     {{ scope.row.ReferID }}
                   </a>
@@ -544,6 +584,14 @@
                     v-else-if="scope.row.ReferID == 'REID0030'"
                     :href="reid0030"
                     target="_black"
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
                   >
                     {{ scope.row.ReferID }}
                   </a>
@@ -611,6 +659,14 @@
                   >
                     {{ scope.row.ReferID }}
                   </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
                   <a v-else :href="url + scope.row.PubMedID" target="_black">
                     {{ scope.row.ReferID }}
                   </a>
@@ -674,6 +730,14 @@
                   >
                     {{ scope.row.ReferID }}
                   </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
                   <a v-else :href="url + scope.row.PubMedID" target="_black">
                     {{ scope.row.ReferID }}
                   </a>
@@ -720,6 +784,14 @@
                     v-else-if="scope.row.ReferID == 'REID0030'"
                     :href="reid0030"
                     target="_black"
+                  >
+                    {{ scope.row.ReferID }}
+                  </a>
+                  <a
+                    v-else-if="
+                      scope.row.ReferID == 'REID0038' ||
+                        scope.row.ReferID == 'REID0044'
+                    "
                   >
                     {{ scope.row.ReferID }}
                   </a>
