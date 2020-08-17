@@ -71,33 +71,35 @@
         </el-collapse-item>
         <el-collapse-item title="4. Convert and Visualization" name="4">
           <p>
-            In the 'Visualization' page, users can convert a nucleotide sequence
-            into numerical sequences according to selected physicochemical
-            properties, with basic kmers of the sequence as intermediate
-            results.
+            In the 'Visualization' page, users can convert FASTA format
+            nucleotide sequences into numerical sequences according to selected
+            physicochemical properties, with basic <i>k</i>-mers of the
+            sequences as intermediate results.
           </p>
           <p>
-            <strong>(1).</strong> When the user have selected the first three
+            <strong>(1).</strong> When users have selected the first three
             parameters, the corresponding physicochemical properties will be
-            displayed for the user to choose. Due to the limited computational
+            displayed for the users to choose. Due to the limited computational
             resources, users should set the maximum number of selectable
             physicochemical properties, which is 5 by default.
           </p>
           <img alt="convert help" src="../assets/help/converthelp1.png" />
 
           <p>
-            <strong>(2).</strong> After step (1), users can enter a DNA or RNA
-            sequence or click on the 'Example' button to get an example
-            sequence. When the user clicked the 'Get value' button, the kmers
-            and the numerical series will be displayed. Clicking the ‘Visualize’
-            button will display the curves on a new page.
+            <strong>(2).</strong> After step (1), users can enter DNA or RNA
+            sequences in FASTA format or click on the 'Example' button to get an
+            example sequence. When the user clicked the 'Get value' button, the
+            <i>k</i>-mers and the numerical series will be displayed. Clicking
+            the ‘Visualize’ button will display multiple curves on a new page.
           </p>
           <img alt="convert help" src="../assets/help/converthelp2.png" />
           <p>
-            <strong>(3).</strong> This graph is a visualization of (1) (2).
-            Users can download the graph locally.
+            <strong>(3).</strong> The graphs are visualization results of (1)
+            (2), which can be shown as either multiple graphs of all sequences
+            or mean curves. Users can download the graphs locally.
           </p>
           <img alt="convert help" src="../assets/help/converthelp3.png" />
+          <img alt="convert help" src="../assets/help/converthelp4.png" />
         </el-collapse-item>
         <el-collapse-item title="5. Batch convert" name="5">
           <p>
