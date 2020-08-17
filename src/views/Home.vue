@@ -88,7 +88,7 @@
           KNIndex database.
         </p>
         <p>
-          Last update on: Jun. 27th, 2020.
+          Last update on: Aug. 17th, 2020.
         </p>
       </el-col>
       <el-col :span="12">
