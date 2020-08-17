@@ -191,7 +191,7 @@ ul.topnav .is-active a {
   color: white;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   ul.topnav li:not(:nth-child(1)) {
     display: none;
   }
