@@ -293,11 +293,14 @@ export default {
         var _this = this;
         // 监听前3个参数，发生变化则清空下面的内容
         _this.form.propertyid = [];
-        _this.form.inputSequence = "";
-        _this.form.outputkmers = "";
-        _this.form.outputValue = "";
 
-        if (val.kmer != "" && val.nucleic != "" && val.value != "") {
+        if (
+          val.kmer != "" &&
+          val.nucleic != "" &&
+          val.value != "" &&
+          !(val.kmer == "tri" && val.nucleic == "rna") &&
+          !(val.kmer == "mono" && val.nucleic == "rna")
+        ) {
           var myAPI = "/api/property/" + val.kmer + val.nucleic + val.value;
           axios.post(myAPI).then(respond => {
             _this.form.properties.property = respond.data;
@@ -307,14 +310,45 @@ export default {
               ID,
               PropertyName
             }));
+            // console.log(_this.form.properties.length, property.length); // 相等
+            // 如果是三元的, 删除多出来的TD0005-1, TD0006-1  【20200817添加】
+            if (val.kmer == "tri") {
+              let length = property.length;
+              for (let i = 0; i < length; i++) {
+                if (
+                  JSON.stringify(property[i]) ===
+                    JSON.stringify({
+                      ID: "TD0005-1",
+                      PropertyName: "Consensus_roll"
+                    }) ||
+                  JSON.stringify(property[i]) ===
+                    JSON.stringify({
+                      ID: "TD0006-1",
+                      PropertyName: "Consensus-Rigid"
+                    }) ||
+                  JSON.stringify(property[i]) ===
+                    JSON.stringify({
+                      ID: "TD0006-1",
+                      PropertyName: "Consensus_Rigid"
+                    })
+                ) {
+                  if (i == 0) {
+                    property.shift(); //删除并返回数组的第一个元素
+                  } else if (i == length - 1) {
+                    property.pop(); //删除并返回数组的最后一个元素
+                  } else {
+                    property.splice(i, 1); //删除下标为i的元素
+                  }
+                }
+              }
+            }
+            // console.log(property);----------------------------------------
             // 每行4个理化性质
-            _this.form.properties.rows = Math.ceil(
-              _this.form.properties.length / 4
-            );
+            _this.form.properties.rows = Math.ceil(property.length / 4);
             // 转换成表格中展示需要的数据格式
             _this.form.properties.propertyname = object2object(
               property,
-              _this.form.properties.length,
+              property.length,
               _this.form.properties.rows
             );
           });
