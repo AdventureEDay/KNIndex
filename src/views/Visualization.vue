@@ -36,7 +36,7 @@
         <el-form-item label="Value type" prop="value">
           <el-radio-group v-model="form.value">
             <el-radio label="original">original</el-radio>
-            <el-radio label="standard">standard</el-radio>
+            <el-radio label="standard">standardized</el-radio>
           </el-radio-group>
         </el-form-item>
 
