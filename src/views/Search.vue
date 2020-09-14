@@ -175,7 +175,7 @@
           <template slot="title">
             <el-row type="flex" justify="space-between" style="width:100%;">
               <el-col :span="12" style="padding-left: 20px; text-align: left;">
-                mononucleotide-DNA-standard
+                mononucleotide-DNA-standardized
               </el-col>
               <el-col :span="12">
                 <el-button
@@ -192,7 +192,7 @@
           <div class="tabletitle">
             <el-row>
               <el-col :span="6" :offset="8">
-                mononucleotide-DNA-standard
+                mononucleotide-DNA-standardized
               </el-col>
             </el-row>
           </div>
@@ -352,7 +352,7 @@
           <template slot="title">
             <el-row type="flex" justify="space-between" style="width:100%;">
               <el-col :span="12" style="padding-left: 20px; text-align: left;">
-                dinucleotide-DNA-standard
+                dinucleotide-DNA-standardized
               </el-col>
               <el-col :span="12">
                 <el-button
@@ -369,7 +369,7 @@
           <div class="tabletitle">
             <el-row>
               <el-col :span="4" :offset="10">
-                dinucleotide-DNA-standard
+                dinucleotide-DNA-standardized
               </el-col>
             </el-row>
           </div>
@@ -531,7 +531,7 @@
           <template slot="title">
             <el-row type="flex" justify="space-between" style="width:100%;">
               <el-col :span="12" style="padding-left: 20px; text-align: left;">
-                dinucleotide-RNA-standard
+                dinucleotide-RNA-standardized
               </el-col>
               <el-col :span="12">
                 <el-button
@@ -548,7 +548,7 @@
           <div class="tabletitle">
             <el-row>
               <el-col :span="4" :offset="10">
-                dinucleotide-RNA-standard
+                dinucleotide-RNA-standardized
               </el-col>
             </el-row>
           </div>
@@ -711,7 +711,7 @@
           <template slot="title">
             <el-row type="flex" justify="space-between" style="width:100%;">
               <el-col :span="12" style="padding-left: 20px; text-align: left;">
-                trinucleotide-DNA-standard
+                trinucleotide-DNA-standardized
               </el-col>
               <el-col :span="12">
                 <el-button
@@ -728,7 +728,7 @@
           <div class="tabletitle">
             <el-row>
               <el-col :span="6" :offset="8">
-                trinucleotide-DNA-standard
+                trinucleotide-DNA-standardized
               </el-col>
             </el-row>
           </div>
@@ -945,7 +945,7 @@ export default {
             },
             {
               value: "option2",
-              label: "standard-mono-DNA"
+              label: "standardized-mono-DNA"
             }
           ]
         },
@@ -958,7 +958,7 @@ export default {
             },
             {
               value: "option4",
-              label: "standard-di-DNA"
+              label: "standardized-di-DNA"
             }
           ]
         },
@@ -971,7 +971,7 @@ export default {
             },
             {
               value: "option6",
-              label: "standard-di-RNA"
+              label: "standardized-di-RNA"
             }
           ]
         },
@@ -984,7 +984,7 @@ export default {
             },
             {
               value: "option8",
-              label: "standard-tri-DNA"
+              label: "standardized-tri-DNA"
             }
           ]
         }
@@ -1049,13 +1049,13 @@ export default {
       let fileName = ".xlsx";
       let file = [
         "mononucleotide-DNA-original",
-        "mononucleotide-DNA-standard",
+        "mononucleotide-DNA-standardized",
         "dinucleotide-DNA-original",
-        "dinucleotide-DNA-standard",
+        "dinucleotide-DNA-standardized",
         "dinucleotide-RNA-original",
-        "dinucleotide-RNA-standard",
+        "dinucleotide-RNA-standardized",
         "trinucleotide-DNA-original",
-        "trinucleotide-DNA-standard"
+        "trinucleotide-DNA-standardized"
       ];
       myTable = myTable + String(id);
       fileName = file[id - 1] + fileName;
