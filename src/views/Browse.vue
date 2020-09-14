@@ -54,7 +54,7 @@
             </el-submenu>
 
             <el-submenu index="22">
-              <template slot="title">Standard values</template>
+              <template slot="title">Standardized values</template>
               <el-menu-item index="2-4">
                 <a href="#mononucleotide-standard">Mononucleotide</a>
               </el-menu-item>
@@ -484,7 +484,8 @@
           <!-- Mononucleotide-DNA-Standard -->
           <div>
             <h3>
-              <a name="mononucleotide-standard"></a>Mononucleotide-DNA-Standard
+              <a name="mononucleotide-standard"></a
+              >Mononucleotide-DNA-Standardized
             </h3>
             <el-table
               :data="monodnastandard"
@@ -549,7 +550,8 @@
           <!-- Dinucleotide-DNA-Standard -->
           <div>
             <h3>
-              <a name="dinucleotidedna-standard"></a>Dinucleotide-DNA-Standard
+              <a name="dinucleotidedna-standard"></a
+              >Dinucleotide-DNA-Standardized
             </h3>
             <el-table
               :data="didnastandard"
@@ -621,7 +623,8 @@
           <!-- Dinucleotide-RNA-Standard -->
           <div>
             <h3>
-              <a name="dinucleotiderna-standard"></a>Dinucleotide-RNA-Standard
+              <a name="dinucleotiderna-standard"></a
+              >Dinucleotide-RNA-Standardized
             </h3>
             <el-table
               :data="dirnastandard"
@@ -692,7 +695,8 @@
           <!-- Trinucleotide-DNA-Standard -->
           <div>
             <h3>
-              <a name="trinucleotide-standard"></a>Trinucleotide-DNA-Standard
+              <a name="trinucleotide-standard"></a
+              >Trinucleotide-DNA-Standardized
             </h3>
             <el-table
               :data="tridnastandard"
