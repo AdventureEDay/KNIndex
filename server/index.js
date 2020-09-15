@@ -1,13 +1,11 @@
 // node 后端服务器
 // Express 服务器入口文件
-const http = require("http");
 const proApi = require("./api/proApi");
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
-
+const path = require("path");
 const history = require("connect-history-api-fallback");
-let server = http.createServer(app);
 
 // 采用设置所有均可访问的方法解决跨域问题
 app.all("*", function(req, res, next) {
@@ -32,7 +30,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 后端api路由
 app.use("/api/property", proApi);
 
+// 部署上线时读取静态文件
+app.use(express.static(path.join(__dirname, "../dist")));
+
 // 监听端口
-server.listen(3000, () => {
+app.listen(3000, () => {
   console.log("success listen at port: 3000");
 });
