@@ -13,7 +13,7 @@ After your Node.js environment and MySQL are ready, find out the location of the
 Firstly, you should create a database. Then, add data to the database by loading SQL file [propertydb.sql](https://github.com/wyzhang0401/KNIndex/blob/master/properties/propertydb.sql).
 
 ### Start backend
-Enter the server directory in the other command line program. To start backend, users need a file to configure MySQL database information, namely **data.base.conf.js**. Users can add the file according to **data.base.conf.js.example** we provided. Then execute the command `node index.js`. 
+Enter the `server` directory in the other command line program. To start backend, users need a file to configure MySQL database information, namely **data.base.conf.js**. Users can add the file according to **data.base.conf.js.example** we provided. Then execute the command `node index.js`. 
 
 ### Start web server
 Type and excute the command `npm run serve` in the first command line program. After a while, KNIndex will start in your default browser.
@@ -24,5 +24,17 @@ Type and excute the command `npm run serve` in the first command line program. A
 - If you have changed the listening port of [backend](https://github.com/wyzhang0401/KNIndex/blob/master/server/index.js), please reconfigure devServer.proxy option in [vue.config.js](https://github.com/wyzhang0401/KNIndex/blob/master/vue.config.js) accordingly. Otherwise there will be an error: **Failed to load resource: the server responded with a status of 500 (Internal Server Error)**.
 
 ## Production
-If you want to deploy the project to your own server, you can excute `npm run build`
+If you want to deploy the project to your own server, you would need to excute `npm run build` to get the `dist` folder firstly. And then configure the running environment on the server.
 
+### Steps for production
+1. Install **Node.js** and **MySQL** on the server.
+2. Create a database and add data to the database by loading SQL file [propertydb.sql](https://github.com/wyzhang0401/KNIndex/blob/master/properties/propertydb.sql).
+3. Create a new directory (e.g. knindex) on the server.
+4. Upload the `dist` folder, `server` folder and `package.json` file to `knindex` directory.
+5. Execute the command `npm install` to install all the dependencies in the `knindex` directory.
+6. Install and configure **Nginx**.
+7. You can install **PM2** to manager your node process. 
+8. Type and execute the command `pm2 start index.js` in the `server` folder.
+
+### Please note
+- If the program does not start properly, please running commands `pm2 list` and `pm2 show 0` (where 0 represents the process id) to view error messages.
