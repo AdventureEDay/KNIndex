@@ -36,7 +36,7 @@
         <el-form-item label="Value type" prop="value">
           <el-radio-group v-model="form.value">
             <el-radio label="original">original</el-radio>
-            <el-radio label="standard">standard</el-radio>
+            <el-radio label="standard">standardized</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -464,9 +464,11 @@ export default {
       let id = Math.floor(Math.random() * Math.pow(2, 32) + 1);
       // _this.fileLink =
       //   "http://localhost:3000/api/property/download/" + id + ".csv"; //本地测试
+      // _this.fileLink =
+      //   "http://knindex.pufengdu.org/api/property/download/" + id + ".csv";
       _this.fileLink =
-        "http://knindex.pufengdu.org/api/property/download/" + id + ".csv";
-      console.log(_this.fileLink);
+        "https://knindex.pufengdu.org/api/property/download/" + id + ".csv";
+      // console.log(_this.fileLink);
       this.linkConfirm(_this.fileLink);
       formData.append("id", id);
       formData.append("kmer", _this.form.kmer);

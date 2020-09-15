@@ -16,8 +16,8 @@
             parameters for encoding a DNA or RNA sequence with a discrete model
             or a vector, which play a vital role in bioinformatics. Here, we
             developed a database named KNIndex (<b
-              ><a href="http://knindex.pufengdu.org"
-                >http://knindex.pufengdu.org</a
+              ><a href="https://knindex.pufengdu.org"
+                >https://knindex.pufengdu.org</a
               ></b
             >) to collect and curate physicochemical properties of
             mononucleotide, dinucleotide and trinucleotide from existing
