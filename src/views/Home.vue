@@ -17,9 +17,9 @@
         >
         <p>
           <b>KNIndex</b> is the abbreviation of <b>K</b>-<b>N</b>ucleotides
-          <b>Index</b> database. The database deposits the original and standard
-          values of the physicochemical properties for <i>k</i>-tuple
-          nucleotides (<i>k</i> = 1, 2, 3).
+          <b>Index</b> database. The database deposits the original and
+          standardized values of the physicochemical properties for
+          <i>k</i>-tuple nucleotides (<i>k</i> = 1, 2, 3).
         </p>
         <p>
           The
@@ -88,19 +88,22 @@
           KNIndex database.
         </p>
         <p>
-          Last update on: Aug. 17th, 2020.
+          Last update on: Sep. 17th, 2020.
         </p>
       </el-col>
-      <el-col :span="12">
+      <!-- 2020.09.07修改了图片和说明的相对位置 -->
+      <el-col :span="10">
         <!-- <div id="myHeatmap" style="width: 600px;height:600px;"></div> -->
         <img
           alt="basic properties"
           src="../assets/property.jpg"
-          style="width: 400px; height:500px; margin: 40px;"
+          style="max-width: 85%; height: auto; margin: 40px;"
         />
-        <span style="font-size: 12px; float:right;"
-          >(Britton et al., <i>J Chem Phys</i>. 2009)</span
-        >
+        <div style="max-width: 100%;">
+          <span style="font-size: 12px; float:right;"
+            >(Britton et al., <i>J Chem Phys</i>. 2009)</span
+          >
+        </div>
         <!-- <div
           id="myChart"
           style="width: auto; height:400px; margin:60px auto;"
