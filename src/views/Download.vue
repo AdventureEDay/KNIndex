@@ -11,29 +11,33 @@
       <h3>Original values</h3>
       <div class="download-content">
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/original/MonoDNA-original.zip'" download="">
-            mononucleotide-DNA-original <i class="el-icon-download"></i>
+            mononucleotide-DNA-original
           </a>
           : This file contains 1 physicochemical property of mononucleotide
           (DNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/original/DiDNA-original.zip'" download="">
-            dinucleotide-DNA-original <i class="el-icon-download"></i>
+            dinucleotide-DNA-original
           </a>
           : This file contains 147 physicochemical properties of dinucleotide
           (DNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/original/DiRNA-original.zip'" download="">
-            dinucleotide-RNA-original <i class="el-icon-download"></i>
+            dinucleotide-RNA-original
           </a>
           : This file contains 22 physicochemical properties of dinucleotide
           (RNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/original/TriDNA-original.zip'" download="">
-            trinucleotide-DNA-original <i class="el-icon-download"></i>
+            trinucleotide-DNA-original
           </a>
           : This file contains 12 physicochemical properties of trinucleotide
           (DNA).
@@ -45,29 +49,33 @@
       <h3>Standardized values</h3>
       <div class="download-content">
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/standard/MonoDNA-standardized.zip'" download="">
-            mononucleotide-DNA-standardized <i class="el-icon-download"></i>
+            mononucleotide-DNA-standardized
           </a>
           : This file contains 1 physicochemical property of mononucleotide
           (DNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/standard/DiDNA-standardized.zip'" download="">
-            dinucleotide-DNA-standardized <i class="el-icon-download"></i>
+            dinucleotide-DNA-standardized
           </a>
           : This file contains 147 physicochemical properties of dinucleotide
           (DNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/standard/DiRNA-standardized.zip'" download="">
-            dinucleotide-RNA-standardized <i class="el-icon-download"></i>
+            dinucleotide-RNA-standardized
           </a>
           : This file contains 22 physicochemical properties of dinucleotide
           (RNA).
         </p>
         <p>
+          <img src="../assets/downicon.png" class="icon" />
           <a :href="'/data/standard/TriDNA-standardized.zip'" download="">
-            trinucleotide-DNA-standardized <i class="el-icon-download"></i>
+            trinucleotide-DNA-standardized
           </a>
           : This file conatins 12 physicochemical properties of trinucleotide
           (DNA).
@@ -79,9 +87,8 @@
       <h3>All files for users</h3>
       <div class="download-content">
         <p>
-          <a href="/data/all.zip" download=""
-            >all.zip <i class="el-icon-download"></i
-          ></a>
+          <img src="../assets/downicon.png" class="icon" />
+          <a href="/data/all.zip" download="">all.zip </a>
           : This file contains all above files.
           <!-- and a PDF format user manual. -->
         </p>
@@ -197,5 +204,12 @@ h3 {
 p {
   text-align: justify;
   line-height: 1.5em;
+}
+
+.icon {
+  height: 1.5em;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 5px;
 }
 </style>

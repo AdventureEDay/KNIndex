@@ -88,7 +88,7 @@
           KNIndex database.
         </p>
         <p>
-          Last update on: Sep. 15th, 2020.
+          Last update on: Sep. 16th, 2020.
         </p>
       </el-col>
       <!-- 2020.09.07修改了图片和说明的相对位置 -->
