@@ -1101,31 +1101,64 @@ export default {
       // 选择框和搜索框都没有内容,在页面中显示所有表中的数据内容
       if (nucleName == "" && propertyName == "") {
         _this.activeNames = [];
-        axios.post("/api/property/monodnaoriginal").then(function(respond) {
-          _this.monodnaoriginal = respond.data;
-        });
-        axios.post("/api/property/monodnastandard").then(function(respond) {
-          _this.monodnastandard = respond.data;
-        });
-        axios.post("/api/property/didnaoriginal").then(function(respond) {
-          _this.didnaoriginal = respond.data;
-        });
-        axios.post("/api/property/didnastandard").then(function(respond) {
-          _this.didnastandard = respond.data;
-        });
-        axios.post("/api/property/dirnaoriginal").then(function(respond) {
-          _this.dirnaoriginal = respond.data;
-        });
-        axios.post("/api/property/dirnastandard").then(function(respond) {
-          _this.dirnastandard = respond.data;
-        });
-        axios.post("/api/property/tridnaoriginal").then(function(respond) {
-          _this.tridnaoriginal = respond.data;
-        });
-        axios.post("/api/property/tridnastandard").then(function(respond) {
-          _this.tridnastandard = respond.data;
-          _this.id = 10;
-        });
+        // axios.post("/api/property/monodnaoriginal").then(function(respond) {
+        //   _this.monodnaoriginal = respond.data;
+        // });
+        // axios.post("/api/property/monodnastandard").then(function(respond) {
+        //   _this.monodnastandard = respond.data;
+        // });
+        // axios.post("/api/property/didnaoriginal").then(function(respond) {
+        //   _this.didnaoriginal = respond.data;
+        // });
+        // axios.post("/api/property/didnastandard").then(function(respond) {
+        //   _this.didnastandard = respond.data;
+        // });
+        // axios.post("/api/property/dirnaoriginal").then(function(respond) {
+        //   _this.dirnaoriginal = respond.data;
+        // });
+        // axios.post("/api/property/dirnastandard").then(function(respond) {
+        //   _this.dirnastandard = respond.data;
+        // });
+        // axios.post("/api/property/tridnaoriginal").then(function(respond) {
+        //   _this.tridnaoriginal = respond.data;
+        // });
+        // axios.post("/api/property/tridnastandard").then(function(respond) {
+        //   _this.tridnastandard = respond.data;
+        //   _this.id = 10;
+        // });
+        axios
+          .all([
+            axios.post("/api/property/monodnaoriginal"),
+            axios.post("/api/property/monodnastandard"),
+            axios.post("/api/property/didnaoriginal"),
+            axios.post("/api/property/didnastandard"),
+            axios.post("/api/property/dirnaoriginal"),
+            axios.post("/api/property/dirnastandard"),
+            axios.post("/api/property/tridnaoriginal"),
+            axios.post("/api/property/tridnastandard")
+          ])
+          .then(
+            axios.spread(function(
+              monoori,
+              monostan,
+              didnaori,
+              didnastan,
+              dirnaori,
+              dirnastan,
+              triori,
+              tristan
+            ) {
+              _this.monodnaoriginal = monoori.data;
+              _this.monodnastandard = monostan.data;
+              _this.didnaoriginal = didnaori.data;
+              _this.didnastandard = didnastan.data;
+              _this.dirnaoriginal = dirnaori.data;
+              _this.dirnastandard = dirnastan.data;
+              _this.tridnaoriginal = triori.data;
+              _this.tridnastandard = tristan.data;
+              _this.id = 10;
+            })
+          );
       }
 
       // 选择框为option1(MonoDNA-original)
@@ -1369,28 +1402,34 @@ export default {
 
   mounted() {
     var _this = this;
-    axios.post("/api/property/getproperty_didna").then(respond => {
-      _this.properties = respond.data;
-      // console.log(_this.didnaproperty);
-    });
-    axios.post("/api/property/getproperty_dirna").then(respond => {
-      _this.dirnaproperty = respond.data;
-      _this.properties.push.apply(_this.properties, _this.dirnaproperty);
-    });
-    axios.post("/api/property/getproperty_tri").then(respond => {
-      _this.triproperty = respond.data;
-      _this.properties.push.apply(_this.properties, _this.triproperty);
-    });
-    axios.post("/api/property/getproperty_mono").then(respond => {
-      _this.monoproperty = respond.data;
-      _this.properties.push.apply(_this.properties, _this.monoproperty);
-      // 将键值 PropertyName 改为 value
-      var result = _this.properties.map(o => {
-        return { value: o.PropertyName };
-      });
-      _this.propertyresults = result;
-      // console.log(_this.propertyresults);
-    });
+    axios
+      .all([
+        axios.post("/api/property/getproperty_didna"),
+        axios.post("/api/property/getproperty_dirna"),
+        axios.post("/api/property/getproperty_tri"),
+        axios.post("/api/property/getproperty_mono")
+      ])
+      .then(
+        axios.spread((didna, dirna, tri, mono) => {
+          let pro = [];
+          // console.log(didna.data);
+          pro.push.apply(pro, didna.data);
+          pro.push.apply(pro, dirna.data);
+          pro.push.apply(pro, tri.data);
+          pro.push.apply(pro, mono.data);
+          _this.didnaproperty = didna.data;
+          _this.dirnaproperty = dirna.data;
+          _this.triproperty = tri.data;
+          _this.monoproperty = mono.data;
+          // 将键值 PropertyName 改为 value
+          let result = pro.map(o => {
+            return { value: o.PropertyName };
+          });
+          _this.properties = result;
+          _this.propertyresults = _this.properties;
+          // console.log(_this.properties);
+        })
+      );
   },
   // 监听下拉框选择项，根据选择项进行输入建议的列表输出
   watch: {
@@ -1400,62 +1439,31 @@ export default {
       // console.log(nucleName);
       // 用于输入建议
       if (nucleName == "") {
-        axios.post("/api/property/getproperty_didna").then(respond => {
-          _this.properties = respond.data;
-        });
-        axios.post("/api/property/getproperty_dirna").then(respond => {
-          _this.dirnaproperty = respond.data;
-          _this.properties.push.apply(_this.properties, _this.dirnaproperty);
-        });
-        axios.post("/api/property/getproperty_tri").then(respond => {
-          _this.triproperty = respond.data;
-          _this.properties.push.apply(_this.properties, _this.triproperty);
-        });
-        axios.post("/api/property/getproperty_mono").then(respond => {
-          _this.monoproperty = respond.data;
-          _this.properties.push.apply(_this.properties, _this.monoproperty);
-          // 将键值 PropertyName 改为 value
-          var result = _this.properties.map(o => {
-            return { value: o.PropertyName };
-          });
-          _this.propertyresults = result;
-        });
+        _this.propertyresults = _this.properties;
       } else if (nucleName == "option1" || nucleName == "option2") {
-        axios.post("/api/property/getproperty_mono").then(respond => {
-          _this.properties = respond.data;
-          // 将键值 PropertyName 改为 value
-          var result = _this.properties.map(o => {
-            return { value: o.PropertyName };
-          });
-          _this.propertyresults = result;
+        // 将键值 PropertyName 改为 value
+        let result = _this.monoproperty.map(o => {
+          return { value: o.PropertyName };
         });
+        _this.propertyresults = result;
       } else if (nucleName == "option3" || nucleName == "option4") {
-        axios.post("/api/property/getproperty_didna").then(respond => {
-          _this.properties = respond.data;
-          // 将键值 PropertyName 改为 value
-          var result = _this.properties.map(o => {
-            return { value: o.PropertyName };
-          });
-          _this.propertyresults = result;
+        // 将键值 PropertyName 改为 value
+        let result = _this.didnaproperty.map(o => {
+          return { value: o.PropertyName };
         });
+        _this.propertyresults = result;
       } else if (nucleName == "option5" || nucleName == "option6") {
-        axios.post("/api/property/getproperty_dirna").then(respond => {
-          _this.properties = respond.data;
-          // 将键值 PropertyName 改为 value
-          var result = _this.properties.map(o => {
-            return { value: o.PropertyName };
-          });
-          _this.propertyresults = result;
+        // 将键值 PropertyName 改为 value
+        let result = _this.dirnaproperty.map(o => {
+          return { value: o.PropertyName };
         });
+        _this.propertyresults = result;
       } else if (nucleName == "option7" || nucleName == "option8") {
-        axios.post("/api/property/getproperty_tri").then(respond => {
-          _this.properties = respond.data;
-          // 将键值 PropertyName 改为 value
-          var result = _this.properties.map(o => {
-            return { value: o.PropertyName };
-          });
-          _this.propertyresults = result;
+        // 将键值 PropertyName 改为 value
+        let result = _this.triproperty.map(o => {
+          return { value: o.PropertyName };
         });
+        _this.propertyresults = result;
       }
     }
   }
