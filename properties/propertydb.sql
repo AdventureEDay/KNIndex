@@ -703,7 +703,7 @@ CREATE TABLE IF NOT EXISTS `monodna-original` (
 -- 正在导出表  propertydb.monodna-original 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `monodna-original` DISABLE KEYS */;
 INSERT INTO `monodna-original` (`ID`, `PropertyName`, `ReferID`, `PubMedID`, `A`, `C`, `G`, `T`) VALUES
-	('MD0001', 'EIIP', 'REID0008', '17597888', 0.126, 0.0806, 0.134, 0.1335);
+	('MD0001', 'EIIP', 'REID0008', '17597888', 0.126, 0.134, 0.0806, 0.1335);
 /*!40000 ALTER TABLE `monodna-original` ENABLE KEYS */;
 
 -- 导出  表 propertydb.monodna-standard 结构
@@ -722,7 +722,7 @@ CREATE TABLE IF NOT EXISTS `monodna-standard` (
 -- 正在导出表  propertydb.monodna-standard 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `monodna-standard` DISABLE KEYS */;
 INSERT INTO `monodna-standard` (`ID`, `PropertyName`, `ReferID`, `PubMedID`, `A`, `C`, `G`, `T`) VALUES
-	('MD0001', 'EIIP', 'REID0008', '17597888', 0.338, -1.714, 0.699, 0.677);
+	('MD0001', 'EIIP', 'REID0008', '17597888', 0.338, 0.699, -1.714, 0.677);
 /*!40000 ALTER TABLE `monodna-standard` ENABLE KEYS */;
 
 -- 导出  表 propertydb.pubmedid 结构
