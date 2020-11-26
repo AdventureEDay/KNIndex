@@ -380,7 +380,7 @@ router.get("/download/*", function(req, res, next) {
   } else {
     res.set("Content-type", "text/html");
     res.send(
-      "http://knindex.pufengdu.org" +
+      "https://knindex.pufengdu.org" +
         req.originalUrl +
         " does not exist!" +
         "\n" +

@@ -53,7 +53,7 @@ function myReadFile(para) {
         remaining = remaining.substring(index + 1);
         index1 = line.indexOf(">");
       }
-      item.seq = seq;
+      item.seq = seq.toUpperCase();
       sequences.push(item);
       // console.log(item);
     }
