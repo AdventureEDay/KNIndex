@@ -51,6 +51,4 @@ If you want to deploy the project to your own server when there are no problems 
 
 ## Citation
 
-Please cite the following paper if you find KNIndex useful in your work:
-
 Wen-Ya Zhang, Junhai Xu, Jun Wang, Yuan-Ke Zhou, Wei Chen, Pu-Feng Du, KNIndex: a comprehensive database of physicochemical properties for *k*-tuple nucleotides, Briefings in Bioinformatics, Volume 22, Issue 4, July 2021, bbaa284, https://doi.org/10.1093/bib/bbaa284.
